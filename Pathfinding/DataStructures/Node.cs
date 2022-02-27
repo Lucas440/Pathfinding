@@ -8,7 +8,7 @@ using System.Diagnostics;
 /// 
 /// DATE: 22/02/22
 /// </summary>
-namespace Pathfinding
+namespace Pathfinding.DataStructures
 {
     /// <summary>
     /// A Class used to represent a Node

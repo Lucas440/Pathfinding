@@ -4,7 +4,7 @@
 /// 
 /// DATE: 22/02/22
 /// </summary>
-namespace Pathfinding
+namespace Pathfinding.DataStructures
 {
     /// <summary>
     /// A Node that can be stored inside of a binary tree

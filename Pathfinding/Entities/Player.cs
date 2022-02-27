@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Pathfinding.DataStructures;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
 /// DATE: 22/02/22
 /// </summary>
-namespace Pathfinding
+namespace Pathfinding.Entities
 {
     /// <summary>
     /// A Class that is used to show the path in action
@@ -27,10 +28,10 @@ namespace Pathfinding
         // DECLAERE a new Vector2 called _location
         private Vector2 _location;
         /// <summary>
-        /// The Default constructor for Player
+        /// Intalises Player class
         /// </summary>
         /// <param name="pList">A List of nodes which is the path inverted</param>
-        public Player(IList<Node> pList)
+        public void Initalise(IList<Node> pList)
         {
             //INTALISES _pathStack
             _pathStack = new Stack<Node>();
@@ -43,6 +44,7 @@ namespace Pathfinding
             //Set the location to the first item on the Stack
             _location = _pathStack.Peek().Location;
         }
+
         /// <summary>
         /// A method used to update the class
         /// </summary>

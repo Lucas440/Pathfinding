@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathfinding.DataStructures;
+using Pathfinding.Searching;
+using Pathfinding.Entities;
+using Pathfinding.Services;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
@@ -42,12 +46,18 @@ namespace Pathfinding
         // DECLARE a int called _arrayHeight
         private int _arrayHeight;
 
+        //DECLARE a IServiceLocator called _serviceLocator
+        IServiceLocator _serviceLocator;
+
         /// <summary>
         /// The Default constructor for Game1
         /// </summary>
-        public Game1()
+        public Game1(IServiceLocator pLocator)
         {
             //INTALISE VARIABLES
+            //_serviceLocator
+            _serviceLocator = pLocator;
+
             //_graphics
             _graphics = new GraphicsDeviceManager(this);
             //Sets Contents Directory
@@ -70,7 +80,7 @@ namespace Pathfinding
             //_timer
             _timer = 60;
             //_binaryTree
-            _binaryTree = new BinaryTree();
+            _binaryTree = (_serviceLocator.Get<BinaryTree>() as IFactory<BinaryTree>).Get<BinaryTree>();
             //_nodeArray
             _nodeArray = new Node[_arrayLength, _arrayHeight];
             //A variable used to determain nodes appart
@@ -82,7 +92,7 @@ namespace Pathfinding
                 for (int j = 0; j < _arrayHeight; j++)
                 {
                     //INTALISES a new BinaryTreeNode and stores it in _nodeArray
-                    _nodeArray[i, j] = new BinaryTreeNode(count.ToString());
+                    _nodeArray[i, j] = (_serviceLocator.Get<BinaryTreeNode>() as IFactory<BinaryTreeNode>).Get<BinaryTreeNode>();
                     //Increments count
                     count++;
                     //INTALISES A new Vector2 called tempLocn
@@ -102,11 +112,13 @@ namespace Pathfinding
             //Calls the method Arrange tree
             ArrangeTree();
             //INTALISES a new DepthFirstSearch passing a blank string and _binaryTree
-            _depthFirst = new DepthFirstSearch("", _binaryTree);
+            _depthFirst = (_serviceLocator.Get<DepthFirstSearch>() as IFactory<DepthFirstSearch>).Get<DepthFirstSearch>();
+            _depthFirst.Intialise("", _binaryTree);
             //Calls the search Method in _depthFirst Search
             _depthFirst.Search();
             //INTALISES a new player passing the path _depthFirst search found
-            _player = new Player(_depthFirst.Path);
+            _player = (_serviceLocator.Get<Player>() as IFactory<Player>).Get<Player>();
+            _player.Initalise(_depthFirst.Path);
         }
         /// <summary>
         /// A method used to Arrange the tree depending on where the start and goal nodes are

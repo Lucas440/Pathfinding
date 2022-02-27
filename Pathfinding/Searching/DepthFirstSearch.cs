@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using Pathfinding.DataStructures;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
 /// DATE: 22/02/22
 /// </summary>
-namespace Pathfinding
+namespace Pathfinding.Searching
 {
     /// <summary>
     /// A Class that searchs a tree using depth first search
@@ -29,11 +30,11 @@ namespace Pathfinding
         /// </summary>
         public IList<Node> Path { get => _path; }
         /// <summary>
-        /// The Default Constructor for the class
+        /// Intalises the DepthFirstSearch Class
         /// </summary>
         /// <param name="pData">The data of the class</param>
         /// <param name="pBinaryTree">The Tree that will be searched</param>
-        public DepthFirstSearch(string pData, BinaryTree pBinaryTree)
+        public void Intialise(string pData, BinaryTree pBinaryTree)
         {
             //INTALISE Variables
             //_data

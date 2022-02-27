@@ -7,7 +7,8 @@ namespace Pathfinding
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            Pathfinding.Services.IServiceLocator serviceLocator = new Pathfinding.Services.ServiceLocator();
+            using (var game = new Game1(serviceLocator))
                 game.Run();
         }
     }
