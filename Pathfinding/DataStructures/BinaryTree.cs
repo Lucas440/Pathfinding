@@ -8,7 +8,7 @@ namespace Pathfinding.DataStructures
     /// <summary>
     /// A Class used to represent a Binary Tree
     /// </summary>
-    public class BinaryTree
+    public class BinaryTree : IBinaryTree
     {
         //DECLARE a BinaryTreeNode variable called _root
         private BinaryTreeNode _root;

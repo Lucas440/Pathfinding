@@ -9,7 +9,7 @@ namespace Pathfinding.DataStructures
     /// <summary>
     /// A Node that can be stored inside of a binary tree
     /// </summary>
-    public class BinaryTreeNode : Node
+    public class BinaryTreeNode : Node, IBinaryTreeNode
     {
         /// <summary>
         /// A Property that gets and sets a binary tree.

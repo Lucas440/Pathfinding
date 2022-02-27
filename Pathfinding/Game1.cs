@@ -24,15 +24,15 @@ namespace Pathfinding
         //DECLARE a new Texture2D variable called _circleTest
         private Texture2D _circleTest;
         //DECLARE a new Player variable called _player
-        private Player _player;
+        private IPlayer _player;
         //DECLARE a new BinaryTree varible called _binaryTree
-        private BinaryTree _binaryTree;
+        private IBinaryTree _binaryTree;
         //DECLARE a Node Array called _nodeArray
-        private Node[,] _nodeArray;
+        private INode[,] _nodeArray;
         //DECLARE a int called _timer
         private int _timer;
         //DECLARE a DepthFirstSearch called _depthFirst
-        private DepthFirstSearch _depthFirst;
+        private IDepthFirstSearch _depthFirst;
         // DECLARE a int called _goalNodeX
         private int _goalNodeX;
         // DECLARE a int called _goalNodeY
@@ -81,10 +81,13 @@ namespace Pathfinding
             _timer = 60;
             //_binaryTree
             _binaryTree = (_serviceLocator.Get<BinaryTree>() as IFactory<BinaryTree>).Get<BinaryTree>();
+
             //_nodeArray
             _nodeArray = new Node[_arrayLength, _arrayHeight];
+
             //A variable used to determain nodes appart
             int count = 0;
+
             // Loops over the arrays length
             for (int i = 0; i < _arrayLength; i++)
             {
@@ -92,14 +95,16 @@ namespace Pathfinding
                 for (int j = 0; j < _arrayHeight; j++)
                 {
                     //INTALISES a new BinaryTreeNode and stores it in _nodeArray
-                    _nodeArray[i, j] = (_serviceLocator.Get<BinaryTreeNode>() as IFactory<BinaryTreeNode>).Get<BinaryTreeNode>();
+                    _nodeArray[i, j] = (_serviceLocator.Get<IBinaryTreeNode>() as IFactory<IBinaryTreeNode>).Get<BinaryTreeNode>();
                     //Increments count
                     count++;
                     //INTALISES A new Vector2 called tempLocn
                     Vector2 tempLocn = new Vector2();
+
                     //Sets the X and Y of TempLocn to 100 times i and j
                     tempLocn.X = i * 100;
                     tempLocn.Y = j * 100;
+
                     //Sets the location of the current node to tempLocn
                     _nodeArray[i, j].Location = tempLocn;
 
@@ -108,16 +113,21 @@ namespace Pathfinding
             //sets the node at _goalNodeX and _goalNodeY in the array to the goal node
             _nodeArray[_goalNodeX, _goalNodeY].GoalNode = true;
             //sets the Root of the tree to the node stored at _startNodeX , _startNodeY
+
             _binaryTree.Root = (BinaryTreeNode)_nodeArray[_startNodeX, _startNodeY];
+
             //Calls the method Arrange tree
             ArrangeTree();
-            //INTALISES a new DepthFirstSearch passing a blank string and _binaryTree
-            _depthFirst = (_serviceLocator.Get<DepthFirstSearch>() as IFactory<DepthFirstSearch>).Get<DepthFirstSearch>();
+
+            //INTALISES a new DepthFirstSearch 
+            _depthFirst = (_serviceLocator.Get<IDepthFirstSearch>() as IFactory<IDepthFirstSearch>).Get<DepthFirstSearch>();
             _depthFirst.Intialise("", _binaryTree);
+
             //Calls the search Method in _depthFirst Search
             _depthFirst.Search();
-            //INTALISES a new player passing the path _depthFirst search found
-            _player = (_serviceLocator.Get<Player>() as IFactory<Player>).Get<Player>();
+
+            //INTALISES a new player
+            _player = (_serviceLocator.Get<IPlayer>() as IFactory<IPlayer>).Get<Player>();
             _player.Initalise(_depthFirst.Path);
         }
         /// <summary>

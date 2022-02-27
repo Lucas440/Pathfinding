@@ -13,7 +13,7 @@ namespace Pathfinding.DataStructures
     /// <summary>
     /// A Class used to represent a Node
     /// </summary>
-    public class Node
+    public class Node : INode
     {
         //DECLARE a Vector2 called _location
         private Vector2 _location;

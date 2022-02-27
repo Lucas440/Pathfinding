@@ -13,10 +13,10 @@ namespace Pathfinding.Entities
     /// <summary>
     /// A Class that is used to show the path in action
     /// </summary>
-    public class Player
+    public class Player : IPlayer
     {
         //DECLARE a new Stack of Nodes called _pathStack
-        private Stack<Node> _pathStack;
+        private Stack<INode> _pathStack;
         /// <summary>
         /// A Property used to get and set the texture of the object
         /// </summary>
@@ -31,12 +31,12 @@ namespace Pathfinding.Entities
         /// Intalises Player class
         /// </summary>
         /// <param name="pList">A List of nodes which is the path inverted</param>
-        public void Initalise(IList<Node> pList)
+        public void Initalise(IList<INode> pList)
         {
             //INTALISES _pathStack
-            _pathStack = new Stack<Node>();
+            _pathStack = new Stack<INode>();
             //For each item in the List
-            foreach (Node n in pList)
+            foreach (INode n in pList)
             {
                 //Pushes it on the Stack
                 _pathStack.Push(n);
