@@ -66,14 +66,6 @@ namespace Pathfinding
             Content.RootDirectory = "Content";
             //Allows the mouse to be seen
             IsMouseVisible = true;
-            //_startNodeX
-            _startNodeX = 0;
-            //_startNodeY
-            _startNodeY = 4;
-            //_goalNodeX
-            _goalNodeX = 7;
-            //_goalNodeY
-            _goalNodeY = 0;
             //_arrayLength
             _arrayLength = 8;
             //_arrayHeight
@@ -121,12 +113,22 @@ namespace Pathfinding
                 //Calls ReadFile passing _arrayHeight
                 _fileHandler.ReadFile(_arrayHeight);
 
-                //INTALISES a new player
+                //INTALISES _player
                 _player = (_serviceLocator.Get<IPlayer>() as IFactory<IPlayer>).Get<Player>();
+                //_startNodeX
+                _startNodeX = _fileHandler.StartX;
+                //_startNodeY
+                _startNodeY = _fileHandler.StartY;
+                //_goalNodeX
+                _goalNodeX = _fileHandler.GoalX;
+                //_goalNodeY
+                _goalNodeY = _fileHandler.GoalY;
+
+
                 //sets GoalNode to the node stored at GoalX and GoalY stored in _fileHandler
-                _nodeArray[_fileHandler.GoalX, _fileHandler.GoalY].GoalNode = true;
+                _nodeArray[_goalNodeX , _goalNodeY].GoalNode = true;
                 //sets the Root of the tree to the node stored at StartX and StartY stored in _fileHandler
-                _binaryTree.Root = (BinaryTreeNode)_nodeArray[_fileHandler.StartX, _fileHandler.StartY];
+                _binaryTree.Root = (BinaryTreeNode)_nodeArray[_startNodeX , _startNodeY];
 
                 //Calls the method Arrange tree
                 ArrangeTree();
