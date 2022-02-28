@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-/// <summary>
+﻿/// <summary>
 /// Author Lucas Brennan
 /// 
 /// Date 27/02/22
@@ -11,7 +8,7 @@ namespace Pathfinding.DataStructures
     /// <summary>
     /// An interface used to represent BinaryTreeNodes
     /// </summary>
-    public interface IBinaryTreeNode: INode
+    public interface IBinaryTreeNode : INode
     {
         /// <summary>
         /// A Property that gets and sets a binary tree.

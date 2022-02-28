@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
@@ -48,12 +46,12 @@ namespace Pathfinding.DataStructures
         /// <summary>
         /// The defualt constructor for node
         /// </summary>
-        public Node() : this(null){ }
+        public Node() : this(null) { }
         /// <summary>
         /// The recommended constructor for node
         /// </summary>
         /// <param name="pData">The Data that is stored within the node</param>
-        public Node(string pData) : this(pData, null){  }
+        public Node(string pData) : this(pData, null) { }
         /// <summary>
         /// A Contructor which definines the nodes neighbous
         /// </summary>

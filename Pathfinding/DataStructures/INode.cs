@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Text;
 /// <summary>
 /// Author Lucas Brennan
 /// 
@@ -35,6 +33,6 @@ namespace Pathfinding.DataStructures
         /// <summary>
         /// A Property used to return a List Of Nodes Called Neighbours
         /// </summary>
-        IList<Node> Neighbours { get; }
+        IList<INode> Neighbours { get; }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Pathfinding.DataStructures;
-using System;
 using System.Collections.Generic;
-using System.Text;
 /// <summary>
 /// Author Lucas Brennan
 /// 

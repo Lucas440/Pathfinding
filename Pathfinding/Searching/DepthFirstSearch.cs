@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Pathfinding.DataStructures;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Pathfinding.DataStructures;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
@@ -54,7 +54,7 @@ namespace Pathfinding.Searching
             //pushes the root of _binaryTree
             _pathStack.Push(_binaryTree.Root);
 
-            
+
         }
         /// <summary>
         /// A Method used to search a binary tree

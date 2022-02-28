@@ -36,7 +36,7 @@ namespace Pathfinding.DataStructures
         /// <param name="pData">The Data that is stored within the node</param>
         /// <param name="pLeft">The Neighbour to the left</param>
         /// <param name="pRight">The Neighbour to the Right</param>
-        public BinaryTreeNode(string pData, BinaryTreeNode pLeft, BinaryTreeNode pRight) : base(pData, new List<Node> { pLeft, pRight })
+        public BinaryTreeNode(string pData, BinaryTreeNode pLeft, BinaryTreeNode pRight) : base(pData, new List<INode> { pLeft, pRight })
         {
 
         }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-/// <summary>
+﻿/// <summary>
 /// Author Lucas Brennan
 /// 
 /// Date 27/02/22
@@ -19,7 +16,7 @@ namespace Pathfinding.Services
         /// </summary>
         /// <typeparam name="C">A Class defined on method call</typeparam>
         /// <returns>An object of type T</returns>
-        public T Get<C>() where C : T, new() 
+        public T Get<C>() where C : T, new()
         {
             //Returns a new object
             return new C();

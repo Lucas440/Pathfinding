@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 /// <summary>
 /// Author Lucas Brennan
 /// 
@@ -20,7 +19,7 @@ namespace Pathfinding.Services
         /// <summary>
         /// The Default Constructor for ServiceLocator
         /// </summary>
-        public ServiceLocator() 
+        public ServiceLocator()
         {
             //INTALISE Class Variables
             //_serviceCollection
@@ -33,13 +32,13 @@ namespace Pathfinding.Services
         /// </summary>
         /// <typeparam name="T">The Product of the service</typeparam>
         /// <returns>The Service that creates the Product</returns>
-        public IService Get<T>() 
+        public IService Get<T>()
         {
             //If _serviceCollection does not contain a key of type T
-            if (!_serviceCollection.ContainsKey(typeof(T))) 
+            if (!_serviceCollection.ContainsKey(typeof(T)))
             {
                 //Adds a new Factory that creates T to _serviceCollection
-                _serviceCollection.Add(typeof(T) , _serviceFactory.Get<Factory<T>>());   
+                _serviceCollection.Add(typeof(T), _serviceFactory.Get<Factory<T>>());
             }
             //Returns the Service stored with the key type T
             return _serviceCollection[typeof(T)];

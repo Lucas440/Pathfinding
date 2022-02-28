@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathfinding.DataStructures;
-using Pathfinding.Searching;
 using Pathfinding.Entities;
+using Pathfinding.Searching;
 using Pathfinding.Services;
 using System;
 using System.Diagnostics;
@@ -48,6 +48,8 @@ namespace Pathfinding
 
         //DECLARE a IServiceLocator called _serviceLocator
         IServiceLocator _serviceLocator;
+
+        FileHandler _fileHandler;
 
         /// <summary>
         /// The Default constructor for Game1
@@ -109,17 +111,22 @@ namespace Pathfinding
 
                 }
             }
+
+            //Intialises _fileHandler
+            _fileHandler = (_serviceLocator.Get<FileHandler>() as IFactory<FileHandler>).Get<FileHandler>();
+
             //Trys the do the following code
             try
             {
+                //Calls ReadFile passing _arrayHeight
+                _fileHandler.ReadFile(_arrayHeight);
 
                 //INTALISES a new player
                 _player = (_serviceLocator.Get<IPlayer>() as IFactory<IPlayer>).Get<Player>();
-                //sets the node at _goalNodeX and _goalNodeY in the array to the goal node
-                _nodeArray[_goalNodeX, _goalNodeY].GoalNode = true;
-                //sets the Root of the tree to the node stored at _startNodeX , _startNodeY
-
-                _binaryTree.Root = (BinaryTreeNode)_nodeArray[_startNodeX, _startNodeY];
+                //sets GoalNode to the node stored at GoalX and GoalY stored in _fileHandler
+                _nodeArray[_fileHandler.GoalX, _fileHandler.GoalY].GoalNode = true;
+                //sets the Root of the tree to the node stored at StartX and StartY stored in _fileHandler
+                _binaryTree.Root = (BinaryTreeNode)_nodeArray[_fileHandler.StartX, _fileHandler.StartY];
 
                 //Calls the method Arrange tree
                 ArrangeTree();
@@ -138,7 +145,7 @@ namespace Pathfinding
                 Debug.WriteLine("There was an error intialising");
             }
         }
-     
+
         /// <summary>
         /// A method used to Arrange the tree depending on where the start and goal nodes are
         /// </summary>
@@ -171,7 +178,7 @@ namespace Pathfinding
             }
             //If the _goalNodeX is LESS Than or Equal to _startNodeX 
             //AND _goalNodeY is LESS than or Equal to _startNodeY
-            else if (_goalNodeX <= _startNodeX && _goalNodeY <= _startNodeY) 
+            else if (_goalNodeX <= _startNodeX && _goalNodeY <= _startNodeY)
             {
                 /* Up Left */
                 // Loops over the arrays length
@@ -219,7 +226,7 @@ namespace Pathfinding
             }
             //If the _goalNodeX is GREATER Than or Equal to _startNodeX 
             //AND _goalNodeY is LESS than or Equal to _startNodeY
-            if (_goalNodeX >= _startNodeX && _goalNodeY <= _startNodeY) 
+            if (_goalNodeX >= _startNodeX && _goalNodeY <= _startNodeY)
             {
                 /* Up Right */
                 // Loops over the arrays length
@@ -239,9 +246,9 @@ namespace Pathfinding
                             ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y - 1];
                         }
                     }
-                } 
+                }
             }
-           
+
         }
         /// <summary>
         /// A method used to Initialize the class
@@ -275,18 +282,18 @@ namespace Pathfinding
             foreach (INode n in _nodeArray)
             {
                 //If n is the GoalNode this is true
-                if (n.GoalNode) 
+                if (n.GoalNode)
                 {
                     //Sets n texture to goalTexture
                     n.Texture = goalTexture;
                 }
                 //If n is the _binaryTrees Root this is true
-                else if (n == _binaryTree.Root) 
+                else if (n == _binaryTree.Root)
                 {
                     //Sets n texture to startTexture
                     n.Texture = startTexture;
                 }
-                else 
+                else
                 {
                     //Sets n texture to entityTexture
                     n.Texture = entityTexture;
@@ -330,7 +337,7 @@ namespace Pathfinding
             // Allows _spriteBatch to start Drawing
             _spriteBatch.Begin();
             //Draws the player object on the screen
-            _spriteBatch.Draw(_player.Texture, new Vector2(_player.PlayerLocn.X + 25 , _player.PlayerLocn.Y + 25), Color.AntiqueWhite);
+            _spriteBatch.Draw(_player.Texture, new Vector2(_player.PlayerLocn.X + 25, _player.PlayerLocn.Y + 25), Color.AntiqueWhite);
 
             foreach (INode n in _nodeArray)
                 _spriteBatch.Draw(n.Texture, n.Location, Color.AntiqueWhite);

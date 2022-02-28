@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathfinding.DataStructures;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Pathfinding.DataStructures;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
@@ -51,7 +51,7 @@ namespace Pathfinding.Entities
         public void Update()
         {
             //If _pathStack is not null this is true
-            if (_pathStack != null) 
+            if (_pathStack != null)
             {
                 //if _pathStack has objects in it this is true
                 if (_pathStack.Count != 0)
@@ -68,7 +68,7 @@ namespace Pathfinding.Entities
                         //Writes the goal was found to the debugger
                         Debug.WriteLine("Goal Found at " + _location.X + " " + _location.Y);
                     }
-                } 
+                }
             }
         }
 
