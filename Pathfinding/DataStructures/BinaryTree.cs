@@ -11,11 +11,11 @@ namespace Pathfinding.DataStructures
     public class BinaryTree : IBinaryTree
     {
         //DECLARE a BinaryTreeNode variable called _root
-        private BinaryTreeNode _root;
+        private IBinaryTreeNode _root;
         /// <summary>
         /// A Property that gets and sets the root of the tree
         /// </summary>
-        public BinaryTreeNode Root { get => _root; set { _root = value; } }
+        public IBinaryTreeNode Root { get => _root; set { _root = value; } }
         /// <summary>
         /// The DEfault constructor for the tree
         /// </summary>

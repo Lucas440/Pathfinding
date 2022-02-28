@@ -17,11 +17,11 @@ namespace Pathfinding.DataStructures
         /// A Property that gets and sets a binary tree.
         /// it will set the node that is stored on the left of the tree
         /// </summary>
-        BinaryTreeNode Left { get; set; }
+        IBinaryTreeNode Left { get; set; }
         /// <summary>
         /// A Property that gets and sets a binary tree.
         /// it will set the node that is stored on the Right of the tree
         /// </summary>
-        BinaryTreeNode Right { get; set; }
+        IBinaryTreeNode Right { get; set; }
     }
 }

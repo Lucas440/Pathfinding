@@ -32,7 +32,7 @@ namespace Pathfinding.DataStructures
         //DECLARE a string called _data
         protected string _data;
         //DECALRE a List of Nodes called _neighbours
-        protected IList<Node> _neighbours;
+        protected IList<INode> _neighbours;
         /// <summary>
         /// A Property used to return and get a string called Data
         /// </summary>
@@ -40,7 +40,7 @@ namespace Pathfinding.DataStructures
         /// <summary>
         /// A Property used to return a List Of Nodes Called Neighbours
         /// </summary>
-        public IList<Node> Neighbours { get => _neighbours; }
+        public IList<INode> Neighbours { get => _neighbours; }
         /// <summary>
         /// A Property used to return and get a bool called Visited
         /// </summary>
@@ -59,7 +59,7 @@ namespace Pathfinding.DataStructures
         /// </summary>
         /// <param name="pData">The Data that is stored within the node</param>
         /// <param name="pNeigbours">The Neighbours of the node</param>
-        public Node(string pData, IList<Node> pNeigbours)
+        public Node(string pData, IList<INode> pNeigbours)
         {
             //Sets _data to pData
             _data = pData;

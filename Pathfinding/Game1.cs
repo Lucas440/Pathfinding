@@ -5,6 +5,8 @@ using Pathfinding.DataStructures;
 using Pathfinding.Searching;
 using Pathfinding.Entities;
 using Pathfinding.Services;
+using System;
+using System.Diagnostics;
 /// <summary>
 /// AUTHOR Lucas Brennan
 /// 
@@ -21,8 +23,6 @@ namespace Pathfinding
         private GraphicsDeviceManager _graphics;
         //DECLARE A new SpriteBatch variable called _spriteBatch
         private SpriteBatch _spriteBatch;
-        //DECLARE a new Texture2D variable called _circleTest
-        private Texture2D _circleTest;
         //DECLARE a new Player variable called _player
         private IPlayer _player;
         //DECLARE a new BinaryTree varible called _binaryTree
@@ -40,7 +40,7 @@ namespace Pathfinding
         // DECLARE a int called _startNodeX
         private int _startNodeX;
         // DECLARE a int called _startNodeY
-        private int  _startNodeY;
+        private int _startNodeY;
         // DECLARE a int called _arrayLength
         private int _arrayLength;
         // DECLARE a int called _arrayHeight
@@ -67,7 +67,7 @@ namespace Pathfinding
             //_startNodeX
             _startNodeX = 0;
             //_startNodeY
-            _startNodeY = 5;
+            _startNodeY = 4;
             //_goalNodeX
             _goalNodeX = 7;
             //_goalNodeY
@@ -75,7 +75,7 @@ namespace Pathfinding
             //_arrayLength
             _arrayLength = 8;
             //_arrayHeight
-            _arrayHeight = 6;
+            _arrayHeight = 5;
 
             //_timer
             _timer = 60;
@@ -87,7 +87,6 @@ namespace Pathfinding
 
             //A variable used to determain nodes appart
             int count = 0;
-
             // Loops over the arrays length
             for (int i = 0; i < _arrayLength; i++)
             {
@@ -110,26 +109,36 @@ namespace Pathfinding
 
                 }
             }
-            //sets the node at _goalNodeX and _goalNodeY in the array to the goal node
-            _nodeArray[_goalNodeX, _goalNodeY].GoalNode = true;
-            //sets the Root of the tree to the node stored at _startNodeX , _startNodeY
+            //Trys the do the following code
+            try
+            {
 
-            _binaryTree.Root = (BinaryTreeNode)_nodeArray[_startNodeX, _startNodeY];
+                //INTALISES a new player
+                _player = (_serviceLocator.Get<IPlayer>() as IFactory<IPlayer>).Get<Player>();
+                //sets the node at _goalNodeX and _goalNodeY in the array to the goal node
+                _nodeArray[_goalNodeX, _goalNodeY].GoalNode = true;
+                //sets the Root of the tree to the node stored at _startNodeX , _startNodeY
 
-            //Calls the method Arrange tree
-            ArrangeTree();
+                _binaryTree.Root = (BinaryTreeNode)_nodeArray[_startNodeX, _startNodeY];
 
-            //INTALISES a new DepthFirstSearch 
-            _depthFirst = (_serviceLocator.Get<IDepthFirstSearch>() as IFactory<IDepthFirstSearch>).Get<DepthFirstSearch>();
-            _depthFirst.Intialise("", _binaryTree);
+                //Calls the method Arrange tree
+                ArrangeTree();
 
-            //Calls the search Method in _depthFirst Search
-            _depthFirst.Search();
+                //INTALISES a new DepthFirstSearch 
+                _depthFirst = (_serviceLocator.Get<IDepthFirstSearch>() as IFactory<IDepthFirstSearch>).Get<DepthFirstSearch>();
+                _depthFirst.Intialise("", _binaryTree);
 
-            //INTALISES a new player
-            _player = (_serviceLocator.Get<IPlayer>() as IFactory<IPlayer>).Get<Player>();
-            _player.Initalise(_depthFirst.Path);
+                //Calls the search Method in _depthFirst Search
+                _depthFirst.Search();
+
+                _player.Initalise(_depthFirst.Path);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("There was an error intialising");
+            }
         }
+     
         /// <summary>
         /// A method used to Arrange the tree depending on where the start and goal nodes are
         /// </summary>
@@ -250,10 +259,39 @@ namespace Pathfinding
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-            _circleTest = this.Content.Load<Texture2D>("CircleTest");
+            //DECLARE a new Texture2D variable called entityTexture and loads "CircleTest"
+            Texture2D entityTexture = this.Content.Load<Texture2D>("CircleTest");
+            //DECLARE a new Texture2D variable called goalTexture and loads "Goal"
+            Texture2D goalTexture = this.Content.Load<Texture2D>("Goal");
+            //DECLARE a new Texture2D variable called startTexture and loads "Start"
+            Texture2D startTexture = this.Content.Load<Texture2D>("Start");
 
-            _player.Texture = _circleTest;
+            // TODO: use this.Content to load your game content here
+            //Sets the players texture to entityTexture
+            _player.Texture = entityTexture;
+            //Loads the "Grid" textue into entityTexture
+            entityTexture = this.Content.Load<Texture2D>("Grid");
+            //loops over each item in _nodeArray
+            foreach (INode n in _nodeArray)
+            {
+                //If n is the GoalNode this is true
+                if (n.GoalNode) 
+                {
+                    //Sets n texture to goalTexture
+                    n.Texture = goalTexture;
+                }
+                //If n is the _binaryTrees Root this is true
+                else if (n == _binaryTree.Root) 
+                {
+                    //Sets n texture to startTexture
+                    n.Texture = startTexture;
+                }
+                else 
+                {
+                    //Sets n texture to entityTexture
+                    n.Texture = entityTexture;
+                }
+            }
         }
         /// <summary>
         /// A Method used to Update the class
@@ -292,7 +330,10 @@ namespace Pathfinding
             // Allows _spriteBatch to start Drawing
             _spriteBatch.Begin();
             //Draws the player object on the screen
-            _spriteBatch.Draw(_player.Texture, _player.PlayerLocn, Color.AntiqueWhite);
+            _spriteBatch.Draw(_player.Texture, new Vector2(_player.PlayerLocn.X + 25 , _player.PlayerLocn.Y + 25), Color.AntiqueWhite);
+
+            foreach (INode n in _nodeArray)
+                _spriteBatch.Draw(n.Texture, n.Location, Color.AntiqueWhite);
 
             //Stops _spriteBatch from drawing
             _spriteBatch.End();

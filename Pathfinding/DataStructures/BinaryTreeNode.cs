@@ -15,12 +15,12 @@ namespace Pathfinding.DataStructures
         /// A Property that gets and sets a binary tree.
         /// it will set the node that is stored on the left of the tree
         /// </summary>
-        public BinaryTreeNode Left { get => (BinaryTreeNode)_neighbours[0]; set { _neighbours[0] = (value); } }
+        public IBinaryTreeNode Left { get => (IBinaryTreeNode)_neighbours[0]; set { _neighbours[0] = (value); } }
         /// <summary>
         /// A Property that gets and sets a binary tree.
         /// it will set the node that is stored on the Right of the tree
         /// </summary>
-        public BinaryTreeNode Right { get => (BinaryTreeNode)_neighbours[1]; set { _neighbours[1] = value; } }
+        public IBinaryTreeNode Right { get => (IBinaryTreeNode)_neighbours[1]; set { _neighbours[1] = value; } }
         /// <summary>
         /// the Defualt constructor
         /// </summary>

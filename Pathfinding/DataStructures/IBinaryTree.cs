@@ -16,7 +16,7 @@ namespace Pathfinding.DataStructures
         /// <summary>
         /// A Property that gets and sets the root of the tree
         /// </summary>
-        BinaryTreeNode Root { get; set; }
+        IBinaryTreeNode Root { get; set; }
         /// <summary>
         /// A Method that clears the Root
         /// </summary>

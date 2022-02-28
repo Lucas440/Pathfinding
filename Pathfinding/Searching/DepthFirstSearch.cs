@@ -118,12 +118,20 @@ namespace Pathfinding.Searching
             //DECLARE a new node Current and set it to the item at the top of _nodes
             INode Current = _nodes.Peek();
             //While Current is not the Root of _binaryTree this loops
-            while (Current != _binaryTree.Root)
+            while (true)
             {
                 //Adds curret to _path
                 _path.Add(Current);
                 //Current is set to the data with the key Current
                 Current = _cameFrom[Current];
+                //If current is the Root this is true
+                if (Current == _binaryTree.Root)
+                {
+                    //Adds curret to _path
+                    _path.Add(Current);
+                    //breaks out of the loop
+                    break;
+                }
             }
         }
     }

@@ -50,21 +50,25 @@ namespace Pathfinding.Entities
         /// </summary>
         public void Update()
         {
-            //if _pathStack has objects in it this is true
-            if (_pathStack.Count != 0)
+            //If _pathStack is not null this is true
+            if (_pathStack != null) 
             {
-                //Sets the Location to the item ontop of the Stacks Location
-                _location = _pathStack.Peek().Location;
-                //Writes the Location to the debugger
-                Debug.WriteLine("Player Locn  is: " + _location.X + " " + _location.Y);
-                //If the itemPoped from the stacked is the goal node
-                if (_pathStack.Pop().GoalNode)
+                //if _pathStack has objects in it this is true
+                if (_pathStack.Count != 0)
                 {
-                    //Clears the Stack
-                    _pathStack.Clear();
-                    //Writes the goal was found to the debugger
-                    Debug.WriteLine("Goal Found at " + _location.X + " " + _location.Y);
-                }
+                    //Sets the Location to the item ontop of the Stacks Location
+                    _location = _pathStack.Peek().Location;
+                    //Writes the Location to the debugger
+                    Debug.WriteLine("Player Locn  is: " + _location.X + " " + _location.Y);
+                    //If the itemPoped from the stacked is the goal node
+                    if (_pathStack.Pop().GoalNode)
+                    {
+                        //Clears the Stack
+                        _pathStack.Clear();
+                        //Writes the goal was found to the debugger
+                        Debug.WriteLine("Goal Found at " + _location.X + " " + _location.Y);
+                    }
+                } 
             }
         }
 
