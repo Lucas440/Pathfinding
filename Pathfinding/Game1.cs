@@ -51,6 +51,8 @@ namespace Pathfinding
 
         FileHandler _fileHandler;
 
+        Tree _tree;
+
         /// <summary>
         /// The Default constructor for Game1
         /// </summary>
@@ -76,42 +78,20 @@ namespace Pathfinding
             //_binaryTree
             _binaryTree = (_serviceLocator.Get<BinaryTree>() as IFactory<BinaryTree>).Get<BinaryTree>();
 
+            _tree = (_serviceLocator.Get<Tree>() as IFactory<Tree>).Get<Tree>();
+
             //_nodeArray
             _nodeArray = new Node[_arrayLength, _arrayHeight];
-
-            //A variable used to determain nodes appart
-            int count = 0;
-            // Loops over the arrays length
-            for (int i = 0; i < _arrayLength; i++)
-            {
-                //Loops over the arrays Hight
-                for (int j = 0; j < _arrayHeight; j++)
-                {
-                    //INTALISES a new BinaryTreeNode and stores it in _nodeArray
-                    _nodeArray[i, j] = (_serviceLocator.Get<IBinaryTreeNode>() as IFactory<IBinaryTreeNode>).Get<BinaryTreeNode>();
-                    //Increments count
-                    count++;
-                    //INTALISES A new Vector2 called tempLocn
-                    Vector2 tempLocn = new Vector2();
-
-                    //Sets the X and Y of TempLocn to 100 times i and j
-                    tempLocn.X = i * 100;
-                    tempLocn.Y = j * 100;
-
-                    //Sets the location of the current node to tempLocn
-                    _nodeArray[i, j].Location = tempLocn;
-
-                }
-            }
 
             //Intialises _fileHandler
             _fileHandler = (_serviceLocator.Get<FileHandler>() as IFactory<FileHandler>).Get<FileHandler>();
 
+            _fileHandler.Initalise(_serviceLocator);
+
             //Trys the do the following code
-            try
-            {
+
                 //Calls ReadFile passing _arrayHeight
-                _fileHandler.ReadFile(_arrayHeight);
+                _nodeArray = _fileHandler.ReadFile(_arrayHeight, _arrayLength);
 
                 //INTALISES _player
                 _player = (_serviceLocator.Get<IPlayer>() as IFactory<IPlayer>).Get<Player>();
@@ -126,26 +106,22 @@ namespace Pathfinding
 
 
                 //sets GoalNode to the node stored at GoalX and GoalY stored in _fileHandler
-                _nodeArray[_goalNodeX , _goalNodeY].GoalNode = true;
+                _nodeArray[_goalNodeX, _goalNodeY].GoalNode = true;
                 //sets the Root of the tree to the node stored at StartX and StartY stored in _fileHandler
-                _binaryTree.Root = (BinaryTreeNode)_nodeArray[_startNodeX , _startNodeY];
+                _tree.Root = _nodeArray[_startNodeX, _startNodeY];
 
                 //Calls the method Arrange tree
                 ArrangeTree();
 
                 //INTALISES a new DepthFirstSearch 
                 _depthFirst = (_serviceLocator.Get<IDepthFirstSearch>() as IFactory<IDepthFirstSearch>).Get<DepthFirstSearch>();
-                _depthFirst.Intialise("", _binaryTree);
+                _depthFirst.Intialise("", _tree);
 
                 //Calls the search Method in _depthFirst Search
                 _depthFirst.Search();
 
                 _player.Initalise(_depthFirst.Path);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("There was an error intialising");
-            }
+            
         }
 
         /// <summary>
@@ -153,105 +129,161 @@ namespace Pathfinding
         /// </summary>
         private void ArrangeTree()
         {
-            //If the _goalNodeX is Greater Than or Equal to _startNodeX 
-            //AND _goalNodeY is Greater than or Equal to _startNodeY
-            if (_goalNodeX >= _startNodeX && _goalNodeY >= _startNodeY)
-            {
-                /* Down Right */
-                // Loops over the arrays length
-                for (int x = 0; x < _arrayLength; x++)
-                {
-                    //Loops over the arrays Hight
-                    for (int y = 0; y < _arrayHeight; y++)
-                    {
-                        //If x +1 is LESS than _arrayLength this is true
-                        if (x + 1 < _arrayLength)
-                        {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x + 1, y];
-                        }
-                        //If y + 1 LESS than _arrayHeight this is true
-                        if (y + 1 < _arrayHeight)
-                        {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y + 1];
-                        }
-                    }
 
-                }
-            }
-            //If the _goalNodeX is LESS Than or Equal to _startNodeX 
-            //AND _goalNodeY is LESS than or Equal to _startNodeY
-            else if (_goalNodeX <= _startNodeX && _goalNodeY <= _startNodeY)
+            // Loops over the arrays length
+            for (int x = 0; x < _arrayLength; x++)
             {
-                /* Up Left */
-                // Loops over the arrays length
-                for (int x = 0; x < _arrayLength; x++)
+                //Loops over the arrays Hight
+                for (int y = 0; y < _arrayHeight; y++)
                 {
-                    //Loops over the arrays Hight
-                    for (int y = 0; y < _arrayHeight; y++)
+                    //If x +1 is LESS than _arrayLength this is true
+                    if (x + 1 < _arrayLength)
                     {
-                        //If X - 1 is GREATER than -1 this is true
-                        if (x - 1 > -1)
+                        if (!(_nodeArray[x + 1, y] is Wall) && !(_nodeArray[x, y] is Wall))
                         {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x - 1, y];
-                        }
-                        //If y - 1 is GREATER than -1 this is true
-                        if (y - 1 > -1)
-                        {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y - 1];
+                            _nodeArray[x, y].Neighbours.Add( _nodeArray[x + 1, y]);
                         }
                     }
-                }
-            }
-            //If the _goalNodeX is LESS Than or Equal to _startNodeX 
-            //AND _goalNodeY is GREATER than or Equal to _startNodeY
-            else if (_goalNodeX <= _startNodeX && _goalNodeY >= _startNodeY)
-            {
-                /* Down Left */
-                // Loops over the arrays length
-                for (int x = 0; x < _arrayLength; x++)
-                {
-                    //Loops over the arrays Hight
-                    for (int y = 0; y < _arrayHeight; y++)
+                    //If y + 1 LESS than _arrayHeight this is true
+                    if (y + 1 < _arrayHeight)
                     {
-                        //If X - 1 is GREATER than -1 this is true
-                        if (x - 1 > -1)
+                        if (!(_nodeArray[x, y + 1] is Wall) && !(_nodeArray[x, y] is Wall))
                         {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x - 1, y];
-                        }
-                        //If y + 1 LESS than _arrayHeight this is true
-                        if (y + 1 < _arrayHeight)
-                        {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y + 1];
+                            _nodeArray[x, y].Neighbours.Add(_nodeArray[x , y + 1]);
                         }
                     }
-                }
-            }
-            //If the _goalNodeX is GREATER Than or Equal to _startNodeX 
-            //AND _goalNodeY is LESS than or Equal to _startNodeY
-            if (_goalNodeX >= _startNodeX && _goalNodeY <= _startNodeY)
-            {
-                /* Up Right */
-                // Loops over the arrays length
-                for (int x = 0; x < _arrayLength; x++)
-                {
-                    //Loops over the arrays Hight
-                    for (int y = 0; y < _arrayHeight; y++)
+                    //If X - 1 is GREATER than -1 this is true
+                    if (x - 1 > -1)
                     {
-                        //If x +1 is LESS than _arrayLength this is true
-                        if (x + 1 < _arrayLength)
-                        {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x + 1, y];
-                        }
-                        //If y - 1 is GREATER than -1 this is true
-                        if (y - 1 > -1)
-                        {
-                            ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y - 1];
-                        }
+                        if (!(_nodeArray[x - 1, y] is Wall) && !(_nodeArray[x, y] is Wall))
+                            _nodeArray[x, y].Neighbours.Add(_nodeArray[x - 1, y]);
+                    }
+                    //If y - 1 is GREATER than -1 this is true
+                    if (y - 1 > -1)
+                    {
+                        if (!(_nodeArray[x, y - 1] is Wall) && !(_nodeArray[x, y] is Wall))
+                            _nodeArray[x, y].Neighbours.Add(_nodeArray[x, y - 1]);
                     }
                 }
             }
 
-        }
+
+
+                    /*
+                    //If the _goalNodeX is Greater Than or Equal to _startNodeX 
+                    //AND _goalNodeY is Greater than or Equal to _startNodeY
+                    if (_goalNodeX >= _startNodeX && _goalNodeY >= _startNodeY)
+                    {
+
+                        //Down Right 
+                    // Loops over the arrays length
+                    for (int x = 0; x < _arrayLength; x++)
+                        {
+                            //Loops over the arrays Hight
+                            for (int y = 0; y < _arrayHeight; y++)
+                            {
+                                //If x +1 is LESS than _arrayLength this is true
+                                if (x + 1 < _arrayLength)
+                                {
+                                    if (!(_nodeArray[x + 1, y] is Wall) && !(_nodeArray[x, y] is Wall))
+                                    {
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x + 1, y]; 
+                                    }
+                                }
+                                //If y + 1 LESS than _arrayHeight this is true
+                                if (y + 1 < _arrayHeight)
+                                {
+                                    if (!(_nodeArray[x, y + 1] is Wall) && !(_nodeArray[x, y] is Wall))
+                                    {
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y + 1];
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    //If the _goalNodeX is LESS Than or Equal to _startNodeX 
+                    //AND _goalNodeY is LESS than or Equal to _startNodeY
+                    else if (_goalNodeX <= _startNodeX && _goalNodeY <= _startNodeY)
+                    {
+                        // Up Left 
+                        // Loops over the arrays length
+                        for (int x = 0; x < _arrayLength; x++)
+                        {
+                            //Loops over the arrays Hight
+                            for (int y = 0; y < _arrayHeight; y++)
+                            {
+                                //If X - 1 is GREATER than -1 this is true
+                                if (x - 1 > -1)
+                                {
+                                    if (!(_nodeArray[x - 1,y] is Wall) && !(_nodeArray[x, y] is Wall))
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x - 1, y];
+                                }
+                                //If y - 1 is GREATER than -1 this is true
+                                if (y - 1 > -1)
+                                {
+                                    if (!(_nodeArray[x, y - 1] is Wall) && !(_nodeArray[x, y] is Wall))
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y - 1];
+                                }
+                            }
+                        }
+                    }
+                    //If the _goalNodeX is LESS Than or Equal to _startNodeX 
+                    //AND _goalNodeY is GREATER than or Equal to _startNodeY
+                    else if (_goalNodeX <= _startNodeX && _goalNodeY >= _startNodeY)
+                    {
+                        // Down Left 
+                        // Loops over the arrays length
+                        for (int x = 0; x < _arrayLength; x++)
+                        {
+                            //Loops over the arrays Hight
+                            for (int y = 0; y < _arrayHeight; y++)
+                            {
+                                //If X - 1 is GREATER than -1 this is true
+                                if (x - 1 > -1)
+                                {
+                                    if (!(_nodeArray[x - 1, y] is Wall) && !(_nodeArray[x, y] is Wall))
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x - 1, y];
+                                }
+                                //If y + 1 LESS than _arrayHeight this is true
+                                if (y + 1 < _arrayHeight)
+                                {
+                                    if (!(_nodeArray[x, y + 1] is Wall) && !(_nodeArray[x, y] is Wall))
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y + 1];
+                                }
+                            }
+                        }
+                    }
+                    //If the _goalNodeX is GREATER Than or Equal to _startNodeX 
+                    //AND _goalNodeY is LESS than or Equal to _startNodeY
+                    if (_goalNodeX >= _startNodeX && _goalNodeY <= _startNodeY)
+                    {
+                        // Up Right 
+                        // Loops over the arrays length
+                        for (int x = 0; x < _arrayLength; x++)
+                        {
+                            //Loops over the arrays Hight
+                            for (int y = 0; y < _arrayHeight; y++)
+                            {
+                                //If x +1 is LESS than _arrayLength this is true
+                                if (x + 1 < _arrayLength)
+                                {
+                                    if (!(_nodeArray[x + 1, y] is Wall) && !(_nodeArray[x, y] is Wall))
+                                            ((BinaryTreeNode)_nodeArray[x, y]).Right = (BinaryTreeNode)_nodeArray[x + 1, y];
+                                }
+                                //If y - 1 is GREATER than -1 this is true
+                                if (y - 1 > -1)
+                                {
+                                    if (!(_nodeArray[x, y - 1] is Wall) && !(_nodeArray[x, y] is Wall))
+                                        ((BinaryTreeNode)_nodeArray[x, y]).Left = (BinaryTreeNode)_nodeArray[x, y - 1];
+                                }
+                            }
+                        }
+                    }
+                    */
+
+
+                }
         /// <summary>
         /// A method used to Initialize the class
         /// </summary>
@@ -275,6 +307,8 @@ namespace Pathfinding
             //DECLARE a new Texture2D variable called startTexture and loads "Start"
             Texture2D startTexture = this.Content.Load<Texture2D>("Start");
 
+            Texture2D wallTexture = this.Content.Load<Texture2D>("Wall");
+
             // TODO: use this.Content to load your game content here
             //Sets the players texture to entityTexture
             _player.Texture = entityTexture;
@@ -290,10 +324,14 @@ namespace Pathfinding
                     n.Texture = goalTexture;
                 }
                 //If n is the _binaryTrees Root this is true
-                else if (n == _binaryTree.Root)
+                else if (n == _tree.Root)
                 {
                     //Sets n texture to startTexture
                     n.Texture = startTexture;
+                }
+                else if (n is Wall) 
+                {
+                    n.Texture = wallTexture;
                 }
                 else
                 {

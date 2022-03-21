@@ -16,7 +16,7 @@ namespace Pathfinding.Searching
         //DECLARE a string called _data
         private string _data;
         //DECLARE a BinaryTree called _binaryTree
-        private IBinaryTree _binaryTree;
+        private Tree _binaryTree;
         //DECLARE a Queue of nodes called _nodes
         Queue<INode> _nodes;
         //DECLARE a stack of nodes called _pathStack
@@ -34,7 +34,7 @@ namespace Pathfinding.Searching
         /// </summary>
         /// <param name="pData">The data of the class</param>
         /// <param name="pBinaryTree">The Tree that will be searched</param>
-        public void Intialise(string pData, IBinaryTree pBinaryTree)
+        public void Intialise(string pData, Tree pBinaryTree)
         {
             //INTALISE Variables
             //_data
@@ -81,6 +81,7 @@ namespace Pathfinding.Searching
                         _pathStack.Push(_nodes.Peek());
                         //sets visited to true
                         _nodes.Peek().Visited = true;
+                        /*
                         //If the Left Node is not null this is true
                         if (((IBinaryTreeNode)_nodes.Peek()).Left != null)
                         {
@@ -107,32 +108,45 @@ namespace Pathfinding.Searching
                         }
 
                     }
-                    //If the Current node is the Goal Node
-                    if (_nodes.Peek().GoalNode)
-                    {
-                        //Stopps the while loop
-                        break;
+                        */
+                        foreach (INode n in _nodes.Peek().Neighbours)
+                        {
+                            _nodes.Enqueue(n);
+                            if (!_cameFrom.ContainsKey(n))
+                            {
+                                _cameFrom.Add(n, _nodes.Peek());
+                            }
+                        }
+
+
+                        //If the Current node is the Goal Node
+                        if (_nodes.Peek().GoalNode)
+                        {
+                            //Stopps the while loop
+                            break;
+                        }
                     }
                 }
             }
-            //DECLARE a new node Current and set it to the item at the top of _nodes
-            INode Current = _nodes.Peek();
-            //While Current is not the Root of _binaryTree this loops
-            while (true)
-            {
-                //Adds curret to _path
-                _path.Add(Current);
-                //Current is set to the data with the key Current
-                Current = _cameFrom[Current];
-                //If current is the Root this is true
-                if (Current == _binaryTree.Root)
+                //DECLARE a new node Current and set it to the item at the top of _nodes
+                INode Current = _nodes.Peek();
+                //While Current is not the Root of _binaryTree this loops
+                while (true)
                 {
                     //Adds curret to _path
                     _path.Add(Current);
-                    //breaks out of the loop
-                    break;
+                    //Current is set to the data with the key Current
+                    Current = _cameFrom[Current];
+                    //If current is the Root this is true
+                    if (Current == _binaryTree.Root)
+                    {
+                        //Adds curret to _path
+                        _path.Add(Current);
+                        //breaks out of the loop
+                        break;
+                    }
                 }
-            }
+            
         }
     }
 }

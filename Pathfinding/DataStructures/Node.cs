@@ -46,12 +46,15 @@ namespace Pathfinding.DataStructures
         /// <summary>
         /// The defualt constructor for node
         /// </summary>
-        public Node() : this(null) { }
+        public Node() 
+        {
+            _neighbours = new List<INode>();
+        }
         /// <summary>
         /// The recommended constructor for node
         /// </summary>
         /// <param name="pData">The Data that is stored within the node</param>
-        public Node(string pData) : this(pData, null) { }
+        public Node(string pData) { }
         /// <summary>
         /// A Contructor which definines the nodes neighbous
         /// </summary>

@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using Microsoft.Xna.Framework;
+using Pathfinding.DataStructures;
+using Pathfinding.Services;
+using System.IO;
 /// <summary>
 /// Author Lucas Brennan
 /// 
@@ -25,6 +28,8 @@ namespace Pathfinding
         //DECLARES a int called _startY
         private int _startY;
 
+        Node[,] _nodeArray;
+
         /// <summary>
         /// A Property that gets GoalX
         /// </summary>
@@ -41,12 +46,30 @@ namespace Pathfinding
         /// A Property that gets StartY
         /// </summary>
         public int StartY { get => _startY; }
+
+        IServiceLocator _serviceLocator;
+
+        /// <summary>
+        /// The Default Constructor
+        /// </summary>
+        public FileHandler() 
+        {
+        }
+
+        public void Initalise(IServiceLocator pLocator) 
+        {
+            _serviceLocator = pLocator;
+        }
+
         /// <summary>
         /// Reads the file which stores node locations
         /// </summary>
         /// <param name="pArrayHight">The hight of the array</param>
-        public void ReadFile(int pArrayHight) 
+        public Node[,] ReadFile(int pArrayHight, int pArrayLength) 
         {
+
+            _nodeArray = new Node[pArrayLength , pArrayHight];
+
             //Sets the file to the path
             _fileName = "..\\..\\..\\NodeSetUp.txt";
 
@@ -61,25 +84,40 @@ namespace Pathfinding
                     //If the line read is not null this is true
                     if ((line = _reader.ReadLine().ToUpper()) != null)
                     {
-                        //If the line contains the letter G this is true
-                        if (line.Contains("G"))
+                        for (int x = 0; x < pArrayLength; x++) 
                         {
-                            //Finds where G is and sets _goalX to it
-                            _goalX = line.IndexOf("G");
-                            //Sets _goalY to y
-                            _goalY = y;
-                        }
-                        //If the line contains S this is true
-                        if (line.Contains("S"))
-                        {
-                            //Finds where the S is and sets _startX to it
-                            _startX = line.IndexOf("S");
-                            //Sets _startY to y
-                            _startY = y;
+                           char nodeIndex = line[x];
+
+                            if (nodeIndex.ToString().ToUpper() == "S")
+                            {
+                                _startX = x;
+                                _startY = y;
+                                _nodeArray[x, y] = (Node)(_serviceLocator.Get<INode>() as IFactory<INode>).Get<Node>();
+                                _nodeArray[x, y].Location = new Vector2(x * 100 , y * 100) ;
+                            }
+                            else if (nodeIndex.ToString().ToUpper() == "G")
+                            {
+                                _goalX = x;
+                                _goalY = y;
+                                _nodeArray[x, y] = (Node)(_serviceLocator.Get<INode>() as IFactory<INode>).Get<Node>();
+                                _nodeArray[x, y].Location = new Vector2(x * 100, y * 100);
+                            }
+                            else if (nodeIndex.ToString().ToUpper() == "W")
+                            {
+                                _nodeArray[x, y] = (Node)(_serviceLocator.Get<Node>() as IFactory<Node>).Get<Wall>();
+                                _nodeArray[x, y].Location = new Vector2(x * 100, y * 100);
+                            }
+                            else 
+                            {
+                                _nodeArray[x, y] = (Node)(_serviceLocator.Get<INode>() as IFactory<INode>).Get<Node>();
+                                _nodeArray[x, y].Location = new Vector2(x * 100, y * 100);
+                            }
                         }
 
                     }
                 }
+
+                return _nodeArray;
             }
         }
     }

@@ -21,7 +21,7 @@ namespace Pathfinding.Searching
         /// </summary>
         /// <param name="pData">The data of the class</param>
         /// <param name="pBinaryTree">The Tree that will be searched</param>
-        void Intialise(string pData, IBinaryTree pBinaryTree);
+        void Intialise(string pData, Tree pBinaryTree);
         /// <summary>
         /// A Method used to search a binary tree
         /// </summary>
