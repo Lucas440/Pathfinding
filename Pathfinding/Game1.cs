@@ -269,7 +269,7 @@ namespace Pathfinding
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //DECLARE a new Texture2D variable called entityTexture and loads "CircleTest"
-            Texture2D entityTexture = this.Content.Load<Texture2D>("CircleTest");
+            Texture2D entityTexture = this.Content.Load<Texture2D>("New Project");
             //DECLARE a new Texture2D variable called goalTexture and loads "Goal"
             Texture2D goalTexture = this.Content.Load<Texture2D>("Goal");
             //DECLARE a new Texture2D variable called startTexture and loads "Start"
