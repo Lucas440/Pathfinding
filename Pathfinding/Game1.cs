@@ -104,7 +104,8 @@ namespace Pathfinding
                 _goalNodeY = _fileHandler.GoalY;
 
             }
-            catch (Exception e) 
+            //Catches the Exception
+            catch (FilePathNotFoundException e) 
             {
                 Debug.WriteLine(e.Message);
             }
@@ -127,9 +128,10 @@ namespace Pathfinding
 
                 //Calls the search Method in _depthFirst Search
                 _depthFirst.Search();
-
+                //Calls Initalise on _player
                 _player.Initalise(_depthFirst.Path);
             }
+            //Catches the Exception
             catch (PathNotFoundExeception e) 
             {
                 Debug.WriteLine(e.Message);
@@ -142,7 +144,6 @@ namespace Pathfinding
         /// </summary>
         private void ArrangeTree()
         {
-
             // Loops over the arrays length
             for (int x = 0; x < _arrayLength; x++)
             {
@@ -214,7 +215,7 @@ namespace Pathfinding
             Texture2D goalTexture = this.Content.Load<Texture2D>("Goal");
             //DECLARE a new Texture2D variable called startTexture and loads "Start"
             Texture2D startTexture = this.Content.Load<Texture2D>("Start");
-
+            //DECLARE a new Texture2D variable called wallTexture and loads "Wall"
             Texture2D wallTexture = this.Content.Load<Texture2D>("Wall");
 
             // TODO: use this.Content to load your game content here

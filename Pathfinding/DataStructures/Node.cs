@@ -48,6 +48,7 @@ namespace Pathfinding.DataStructures
         /// </summary>
         public Node()
         {
+            //INTIALISES _neighbours
             _neighbours = new List<INode>();
         }
         /// <summary>
