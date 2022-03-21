@@ -21,7 +21,7 @@ namespace Pathfinding.Entities
         /// <summary>
         /// A Propert used to get the location of the player
         /// </summary>
-        Vector2 PlayerLocn { get; }
+        Vector2 PlayerLocn { get; set; }
         /// <summary>
         /// Intalises Player class
         /// </summary>

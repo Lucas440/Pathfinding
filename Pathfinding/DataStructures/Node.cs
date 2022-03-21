@@ -46,7 +46,7 @@ namespace Pathfinding.DataStructures
         /// <summary>
         /// The defualt constructor for node
         /// </summary>
-        public Node() 
+        public Node()
         {
             _neighbours = new List<INode>();
         }

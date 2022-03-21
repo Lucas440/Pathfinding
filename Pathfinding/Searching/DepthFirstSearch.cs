@@ -1,4 +1,6 @@
 ﻿using Pathfinding.DataStructures;
+using Pathfinding.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 /// <summary>
@@ -81,44 +83,18 @@ namespace Pathfinding.Searching
                         _pathStack.Push(_nodes.Peek());
                         //sets visited to true
                         _nodes.Peek().Visited = true;
-                        /*
-                        //If the Left Node is not null this is true
-                        if (((IBinaryTreeNode)_nodes.Peek()).Left != null)
-                        {
-                            //Enqueues the Left Node
-                            _nodes.Enqueue(((IBinaryTreeNode)_nodes.Peek()).Left);
-                            //If the node is not in _cameFrom this is true
-                            if (!_cameFrom.ContainsKey(((IBinaryTreeNode)_nodes.Peek()).Left))
-                            {
-                                //Adds the Left Node as a key and the current node as data to _cameFrom
-                                _cameFrom.Add(((IBinaryTreeNode)_nodes.Peek()).Left, _nodes.Peek());
-                            }
-                        }
-                        //If the Right Node is not null this is true
-                        if (((IBinaryTreeNode)_nodes.Peek()).Right != null)
-                        {
-                            //Enqueues the Right Node
-                            _nodes.Enqueue(((IBinaryTreeNode)_nodes.Peek()).Right);
-                            //If the node is not in _cameFrom this is true
-                            if (!_cameFrom.ContainsKey(((IBinaryTreeNode)_nodes.Peek()).Right))
-                            {
-                                //Adds the Right Node as a key and the current node as data to _cameFrom
-                                _cameFrom.Add(((IBinaryTreeNode)_nodes.Peek()).Right, _nodes.Peek());
-                            }
-                        }
-
-                    }
-                        */
+                        //Loops over each node in the current nodes neighbours
                         foreach (INode n in _nodes.Peek().Neighbours)
                         {
+                            //adds the node to the queue
                             _nodes.Enqueue(n);
+                            //If the current node is not in the dictionary this is true
                             if (!_cameFrom.ContainsKey(n))
                             {
+                                //Adds the node as a key and the current node as data
                                 _cameFrom.Add(n, _nodes.Peek());
                             }
                         }
-
-
                         //If the Current node is the Goal Node
                         if (_nodes.Peek().GoalNode)
                         {
@@ -128,7 +104,10 @@ namespace Pathfinding.Searching
                     }
                 }
             }
-                //DECLARE a new node Current and set it to the item at the top of _nodes
+            //Trys the following
+            try
+            {
+                //DECLARE a new node Current
                 INode Current = _nodes.Peek();
                 //While Current is not the Root of _binaryTree this loops
                 while (true)
@@ -146,7 +125,14 @@ namespace Pathfinding.Searching
                         break;
                     }
                 }
-            
+            }
+            //Catches PathNotFoundExeceptions
+            catch (Exception e) 
+            {
+                //Throws a new Exception
+                throw new PathNotFoundExeception("Could Not Find A Path");
+            }
+
         }
     }
 }

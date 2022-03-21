@@ -1,9 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿/// <summary>
+/// Author Lucas Brennan
+/// 
+/// Date 21/03/22
+/// </summary>
 namespace Pathfinding.DataStructures
 {
+    /// <summary>
+    /// A Class that represents a Tree Data Structure
+    /// </summary>
     public class Tree
     {
         //DECLARE a BinaryTreeNode variable called _root
