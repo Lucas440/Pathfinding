@@ -1,6 +1,7 @@
 # Pathfinding
 This is My Final year project at university </br>
-The Goal of the project was to create a working pathfinding algorithm in C#
+The Goal of the project was to create a working pathfinding algorithm in C# </br>
+Currently this is a Depth First Search Aglorithm 
 
 # User Guide
 Download the file from GitHub to View the code</br>
