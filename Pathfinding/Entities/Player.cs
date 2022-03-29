@@ -56,10 +56,15 @@ namespace Pathfinding.Entities
                 //if _pathStack has objects in it this is true
                 if (_pathStack.Count != 0)
                 {
+                    //Sets the PlayerVisited Property to true
+                    _pathStack.Peek().PlayerVisited = true;
+
                     //Sets the Location to the item ontop of the Stacks Location
                     _location = _pathStack.Peek().Location;
                     //Writes the Location to the debugger
                     Debug.WriteLine("Player Locn  is: " + _location.X + " " + _location.Y);
+                    
+
                     //If the itemPoped from the stacked is the goal node
                     if (_pathStack.Pop().GoalNode)
                     {

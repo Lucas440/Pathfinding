@@ -279,6 +279,9 @@ namespace Pathfinding
         /// <param name="gameTime">A variable which stores how much time has passed in the game</param>
         protected override void Draw(GameTime gameTime)
         {
+            //DECLARE a new Texture2D variable called wallTexture and loads "Wall"
+            Texture2D vistedTexture = this.Content.Load<Texture2D>("Visited");
+
             //Sets the background of the screen to Blue
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -288,9 +291,18 @@ namespace Pathfinding
             //Draws the player object on the screen
             _spriteBatch.Draw(_player.Texture, new Vector2(_player.PlayerLocn.X + 25, _player.PlayerLocn.Y + 25), Color.AntiqueWhite);
 
+            //Loops over each node
             foreach (INode n in _nodeArray)
+            {
+                //If the player has visited this node this is true
+                if (n.PlayerVisited) 
+                {
+                    //Changes the texture to visitedTexture
+                    n.Texture = vistedTexture;
+                }
+                //Draws the node
                 _spriteBatch.Draw(n.Texture, n.Location, Color.AntiqueWhite);
-
+            }
             //Stops _spriteBatch from drawing
             _spriteBatch.End();
             //Calls Draw in the parent class

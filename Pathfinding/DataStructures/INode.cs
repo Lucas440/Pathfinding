@@ -34,5 +34,9 @@ namespace Pathfinding.DataStructures
         /// A Property used to return a List Of Nodes Called Neighbours
         /// </summary>
         IList<INode> Neighbours { get; }
+        /// <summary>
+        /// A Property used to Check if the player visted this node
+        /// </summary>
+        bool PlayerVisited { get; set; }
     }
 }

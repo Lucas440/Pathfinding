@@ -13,6 +13,11 @@ namespace Pathfinding.DataStructures
     /// </summary>
     public class Node : INode
     {
+        /// <summary>
+        /// A Property used to Check if the player visted this node
+        /// </summary>
+        public bool PlayerVisited { get; set; }
+
         //DECLARE a Vector2 called _location
         private Vector2 _location;
         /// <summary>
