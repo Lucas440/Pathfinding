@@ -1,6 +1,6 @@
 # Pathfinding
-This is My Final year project at univercity
-The Goal of the project was to create a working pathfinding algorithm in C#
+This is My Final year project at university
+	The Goal of the project was to create a working pathfinding algorithm in C#
 
 # User Guide
 Download the file from GitHub to View the code
